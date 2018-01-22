@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:raindrop/ui/calendar/calendar_day.dart';
+import 'package:raindrop/ui/calendar/calendar.dart';
 
 class TimelinePage extends StatefulWidget {
   TimelinePage({Key key, this.title}) : super(key: key);
@@ -52,17 +52,7 @@ class _TimelinePageState extends State<TimelinePage> {
                 ),
               ),
             ),
-            new Container(
-                padding: const EdgeInsets.all(10.0),
-                child: new Row(
-                  children: <Widget>[
-                    new CalendarDay(
-                      13,
-                      type: CalendarDayType.selected,
-                      isBordered: false,
-                    ),
-                  ],
-                ))
+            new Calendar(),
           ],
         ),
       ),

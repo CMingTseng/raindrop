@@ -1,55 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 enum CalendarDayType { disabled, unselected, selected }
 
-class CalendarDay extends StatefulWidget {
-  CalendarDay(this.day,
-      {this.type = CalendarDayType.unselected, this.isBordered = false});
+class CalendarDay extends StatelessWidget {
+  CalendarDay(
+    this.day, {
+    this.type = CalendarDayType.unselected,
+    this.isBordered = false,
+    @required this.onChanged,
+  });
 
   final int day;
+
   final CalendarDayType type;
   final bool isBordered;
 
-  @override
-  _CalendarDayState createState() => new _CalendarDayState();
-}
-
-class _CalendarDayState extends State<CalendarDay> {
-  CalendarDayType _type;
-  bool _isBordered;
-
-  double _diameter;
-  double _fontSize;
+  final ValueChanged<int> onChanged;
 
   void _handleTap() {
-    setState(() {
-      switch (_type) {
-        case CalendarDayType.disabled:
-          _type = CalendarDayType.selected;
-          break;
-        case CalendarDayType.selected:
-          _type = CalendarDayType.unselected;
-          break;
-        case CalendarDayType.unselected:
-          _type = CalendarDayType.disabled;
-          break;
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _type = widget.type;
-    _isBordered = widget.isBordered;
+    if (type == CalendarDayType.unselected) {
+      onChanged(day);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _diameter = MediaQuery.of(context).size.width / 11;
-    _fontSize = MediaQuery.of(context).size.width / 26;
+    final double _diameter = MediaQuery.of(context).size.width / 10;
+    final double _fontSize = MediaQuery.of(context).size.width / 25;
 
     return new GestureDetector(
       onTap: _handleTap,
@@ -58,25 +37,25 @@ class _CalendarDayState extends State<CalendarDay> {
         height: _diameter,
         decoration: new BoxDecoration(
           shape: BoxShape.circle,
-          color: _type == CalendarDayType.selected
+          color: type == CalendarDayType.selected
               ? Theme.of(context).primaryColor
               : null,
-          border: _isBordered
+          border: isBordered
               ? new Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2.0,
-                )
+            color: Theme.of(context).primaryColor,
+            width: 2.0,
+          )
               : null,
         ),
         child: new Center(
           child: new Text(
-            widget.day.toString(),
+            day.toString(),
             style: new TextStyle(
-              color: _type == CalendarDayType.selected
+              color: type == CalendarDayType.selected
                   ? Colors.white
-                  : _type == CalendarDayType.disabled
-                      ? Colors.grey
-                      : Colors.black,
+                  : type == CalendarDayType.disabled
+                  ? Colors.grey
+                  : Colors.black,
               fontWeight: FontWeight.bold,
               fontSize: _fontSize,
             ),
